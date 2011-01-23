@@ -1,0 +1,157 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin>
+    <id>com.esn.idea.liquibaseejb</id>
+    <name>LiquiBase EJB Integration</name>
+    <depends>com.intellij.javaee</depends>
+    <description>
+    <![CDATA[LiquiBase EJB Integration Plug-in for IntelliJ IDEA.
+        Compares LiquiBase Database ChangeLog with EJB entity model providing inspections and intentions adding to ChangeLog.
+        <br><br>
+        Examples include:
+        <br>
+        * Add a new entity -> inspection to add liquibase addTable
+        <br>
+        * Add a new entity field -> inspection to add liquibase addColumn
+        <br>
+        * Change type of field -> inspection to add liquibase modifyColumn
+        <br>
+        * Rename field -> dialog to add liquibase renameColumn.
+        <br>
+        <br>
+        Other features:
+
+        <br>
+        * Liquibase EJB facet to configure and create changelog file.
+        <br>
+        * Context sensentive completion of table and column names within a changelog file.
+        <br>
+        * Tool window with schema as would be created by liquibase changelog as well as EJB model.
+        ]]>
+    </description>
+    <version>1.01</version>
+    <vendor>ESN AB (www.esn.me)</vendor>
+    <idea-version since-build="9732"/>
+    <change-notes>
+        <![CDATA[
+        === 1.01 <br>
+* Fix for IDEA hanging on startup<br>
+        === 1.0 <br>
+* IDEA 8.1 Version<br>
+        === 0.100 <br>
+* [LBEJB-72] - Wrong naming of @ManyToMany columns when they start with entity names<br>
+* [LBEJB-73] - TIMESTAMP is used wrongly instead of DATETIME<br>
+<br>
+        === 0.99 <br>
+New Feature <br>
+<br>
+    * [LBEJB-2] - @Inheritance support<br>
+    * [LBEJB-32] - @PrimaryKeyJoinColumn support<br>
+    * [LBEJB-34] - @DiscriminatorValue,@DiscriminatorColumn support<br>
+    * [LBEJB-44] - @MapKey support<br>
+        === 0.98 <br>
+New Feature <br>
+ <br>
+    * [LBEJB-26] - @AssociationOverride support <br>
+    * [LBEJB-29] - @IdClass support <br>
+    * [LBEJB-68] - Entity name support <br>
+        === 0.97 <br>
+Bug <br>
+ <br>
+    * [LBEJB-65] - byte[] suggests null as column type <br>
+    * [LBEJB-66] - if @Column annotation is used on a field, the plugin recognize it as VARCHAR(255) no matter what other annotations or parameters in @Column says <br>
+    * [LBEJB-70] - For long Strings CBLOB is used. Should be CLOB. <br>
+ <br>
+Improvement <br>
+ <br>
+    * [LBEJB-58] - Merge handling of join columns for all relationship attributes <br>
+ <br>
+New Feature <br>
+ <br>
+    * [LBEJB-24] - @JoinColumn support <br>
+    * [LBEJB-25] - @JoinTable support <br>
+    * [LBEJB-28] - Multicolumn foreign key support <br>
+    * [LBEJB-69] - columnDefinition support <br>
+        === 0.96 <br>
+Bug<br>
+<br>
+    * [LBEJB-18] - Creating table with fields having multiple primary key fields adds one pkconstraint per column <br>
+    * [LBEJB-45] - Does not recognize column type changes in renameColumn tags in liquibase.xml <br>
+    * [LBEJB-46] - Stacktrace in checkClass <br>
+    * [LBEJB-49] - @ManyToOne columns in embedded keys get marked as autoincrement if target fields are <br>
+    * [LBEJB-50] - AIOOBE when renaming "other side" attribute <br>
+    * [LBEJB-51] - "Create foreign key" uses invalid column name <br>
+    * [LBEJB-52] - Foreign key column gets "autoIncrement" attribute set in liquibase.xml <br>
+    * [LBEJB-53] - *ToOne to fields with id field in superclass does not work <br>
+    * [LBEJB-57] - Nullpointer in ColumnInspection <br>
+    * [LBEJB-61] - @Lob gives TEXT type instead of BLOB <br>
+    * [LBEJB-62] - renameColumn tags are missing columnDataType <br>
+    * [LBEJB-64] - IndexOutOfBoundsException in AnyToOneModel <br>
+ <br>
+Improvement <br>
+ <br>
+    * [LBEJB-63] - Use liquibase "generic" data types instead of f.i. TEXT <br>
+ <br>
+ <br>
+        === 0.95 <br>
+Bug<br>
+    * [LBEJB-23] - Refactoring: Extract subclasses of class and member models<br>
+    * [LBEJB-36] - QuickFix becomes add unique constraint when it should be drop<br>
+    * [LBEJB-37] - Modify column type does not mention column name<br>
+    * [LBEJB-38] - renameColumn may cause ArrayIndexOutOfBoundsException<br>
+    * [LBEJB-39] - Race when applying quickfix, sometimes same fix appears again<br>
+<br>
+Improvement<br>
+    * [LBEJB-40] - Use addUniqueConstraint instead of using constraints tag when creating columns<br>
+<br>
+New Feature<br>
+    * [LBEJB-22] - Class rename listener should use new databasemodel<br>
+    * [LBEJB-27] - @Table support<br>
+    * [LBEJB-30] - @SecondaryTable support<br>
+    * [LBEJB-31] - @Version support<br>
+    * [LBEJB-33] - @TableGenerator support<br>
+    * [LBEJB-43] - optional support in @Basic<br>
+    * [LBEJB-42] - @Basic support<br>
+<br>
+        === 0.94 <br>
+Bug<br>
+<br>
+    * [LBEJB-16] - Add index without name causes exception<br>
+    * [LBEJB-17] - liquibase.xml in output directories are detected as facet<br>
+    * [LBEJB-19] - Ids generated are sometimes not unique<br>
+<br>
+New Feature<br>
+<br>
+    * [LBEJB-3] - Support for @AttributeOverride and @AttributeOverrides<br>
+    * [LBEJB-4] - @OneToMany without mappedBy<br>
+    * [LBEJB-5] - @ManyToMany support<br>
+    * [LBEJB-20] - EJB model view<br>
+    * [LBEJB-21] - @Column name support<br>
+<br>
+        === 0.93 <br>
+           * Fixed bug with @OneToOne/@OneToMany and mappedBy<br>
+        === 0.92 <br>
+           * Null checks<br>
+        ]]>
+    </change-notes>
+
+    <extensions defaultExtensionNs="com.intellij">
+      <dom.fileDescription implementation="com.esn.idea.liquibaseejb.model.liquibase.LiquibaseDomFileDescription"/>
+    </extensions>
+
+
+    <application-components>
+        <component>
+            <implementation-class>com.esn.idea.liquibaseejb.LiquibaseComponent</implementation-class>
+        </component>
+    </application-components>
+    <project-components>
+        <component>
+            <implementation-class>com.esn.idea.liquibaseejb.LiquibaseProjectComponent</implementation-class>
+        </component>
+    </project-components>
+    <module-components>
+        <component>
+            <implementation-class>com.esn.idea.liquibaseejb.LiquibaseModuleComponent</implementation-class>
+        </component>
+    </module-components>
+</idea-plugin>
