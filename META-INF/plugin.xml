@@ -8,6 +8,9 @@
     <![CDATA[LiquiBase EJB Integration Plug-in for IntelliJ IDEA.
         Compares LiquiBase Database ChangeLog with EJB entity model providing inspections and intentions adding to ChangeLog.
         <br><br>
+        Source available at https://github.com/marcusn/LiquibaseEjb
+        <br><br>
+
         Examples include:
         <br>
         * Add a new entity -> inspection to add liquibase addTable
