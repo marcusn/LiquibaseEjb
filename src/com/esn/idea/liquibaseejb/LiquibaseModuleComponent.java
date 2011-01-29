@@ -7,6 +7,7 @@ import com.esn.idea.liquibaseejb.model.ejb.module.ModuleModel;
 import com.esn.idea.liquibaseejb.model.liquibase.LiquibaseModel;
 import com.esn.idea.liquibaseejb.model.liquibase.xml.ChangeSet;
 import com.esn.idea.liquibaseejb.model.liquibase.xml.DatabaseChangeLog;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
 import com.intellij.openapi.module.ModuleUtil;
@@ -123,7 +124,13 @@ public class LiquibaseModuleComponent implements ModuleComponent
 
 	public void projectOpened()
 	{
-        updateEjbModel();
+        ApplicationManager.getApplication().invokeLater(
+                new Runnable() {
+                    public void run() {
+                        updateEjbModel();
+                    }
+                }
+        );
 	}
 
 	public void projectClosed()

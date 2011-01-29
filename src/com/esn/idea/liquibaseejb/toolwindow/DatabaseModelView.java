@@ -2,6 +2,8 @@ package com.esn.idea.liquibaseejb.toolwindow;
 
 import com.esn.idea.liquibaseejb.model.database.DatabaseColumnModel;
 import com.esn.idea.liquibaseejb.model.database.DatabaseModel;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 
 import javax.swing.*;
@@ -63,8 +65,16 @@ public class DatabaseModelView extends JPanel
         currentRow = 0;
     }
 
-    public void setDatabaseModel(DatabaseModel databaseModel)
+    public void setDatabaseModel(final DatabaseModel databaseModel)
     {
+        if (!ApplicationManager.getApplication().isDispatchThread()) {
+           ApplicationManager.getApplication().invokeLater(new Runnable() {
+               public void run() {
+                   setDatabaseModel(databaseModel);
+               }
+           }, ModalityState.NON_MODAL);
+           return;
+        }
         if (this.databaseModel != databaseModel)
 		{
 			this.databaseModel = databaseModel;
