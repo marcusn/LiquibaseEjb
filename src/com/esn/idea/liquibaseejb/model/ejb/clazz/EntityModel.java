@@ -107,7 +107,7 @@ public class EntityModel extends ClassModel<Entity>
 
     private String entityTableName()
     {
-        String declaredTableName = persistentObject.getTable().getTableName().getStringValue();
+        String declaredTableName = persistentObject.getTable().getTableName().getValue();
 
         if ("".equals(declaredTableName))
         {
