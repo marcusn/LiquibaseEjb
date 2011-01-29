@@ -28,9 +28,6 @@ public class LiquibaseComponent implements ApplicationComponent, InspectionToolP
 		intentionManager.addAction(new AddIndexAction());
 		intentionManager.addAction(new AddUniqueConstraintAction());
          **/
-
-        FacetTypeRegistry.getInstance().registerFacetType(LiquibaseFacetType.INSTANCE);
-
     }
 
 	public void disposeComponent()
