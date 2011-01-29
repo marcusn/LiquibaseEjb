@@ -10,6 +10,7 @@ import com.esn.idea.liquibaseejb.model.ejb.module.ModuleModel;
 import com.esn.idea.liquibaseejb.util.EsnPsiUtils;
 import com.intellij.javaee.model.common.persistence.mapping.Entity;
 import com.intellij.javaee.model.common.persistence.mapping.SecondaryTable;
+import com.intellij.persistence.model.PersistentEntity;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;

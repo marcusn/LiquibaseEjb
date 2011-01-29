@@ -6,6 +6,7 @@ import com.esn.idea.liquibaseejb.model.ejb.member.MemberModel;
 import com.esn.idea.liquibaseejb.util.EsnPsiUtils;
 import com.intellij.javaee.model.common.persistence.mapping.PersistentObject;
 import com.intellij.javaee.model.common.persistence.mapping.Embeddable;
+import com.intellij.persistence.model.PersistentEmbeddable;
 import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.GlobalSearchScope;

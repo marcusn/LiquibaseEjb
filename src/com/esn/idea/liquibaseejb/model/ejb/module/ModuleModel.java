@@ -11,21 +11,19 @@ import com.esn.idea.liquibaseejb.model.ejb.context.OverridingEjbModelContext;
 import com.esn.idea.liquibaseejb.model.ejb.member.MemberModel;
 import com.intellij.facet.FacetManager;
 import com.intellij.javaee.model.common.persistence.mapping.*;
-import com.intellij.javaee.model.common.persistence.mapping.Entity;
 import com.intellij.javaee.model.common.persistence.mapping.MappedSuperclass;
-import com.intellij.javaee.model.common.persistence.mapping.EntityMappings;
 import com.intellij.javaee.model.common.persistence.mapping.Embeddable;
+import com.intellij.javaee.model.common.persistence.mapping.PersistentObject;
 import com.intellij.javaee.model.xml.persistence.PersistenceUnit;
 import com.intellij.jpa.facet.JpaFacet;
 import com.intellij.openapi.module.Module;
+import com.intellij.persistence.model.*;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.persistence.model.helpers.PersistentEntityModelHelper;
-import com.intellij.persistence.model.PersistentEntity;
-import com.intellij.persistence.model.PersistenceInheritanceType;
 
 import java.util.*;
 
@@ -37,7 +35,7 @@ import java.util.*;
 public class ModuleModel extends EjbModel
 {
     private JpaFacet jpaFacet;
-    private PersistenceUnit unit;
+    private PersistencePackage unit;
 
     private Map<PsiClass, ClassModel> classToModel = new HashMap<PsiClass, ClassModel>();
     private Map<PsiMember, MemberModel> memberToModel = new HashMap<PsiMember, MemberModel>();
@@ -58,7 +56,7 @@ public class ModuleModel extends EjbModel
 
 
         // TODO: Support mapping of liquibase file to persistence unit
-        List<PersistenceUnit> units = null;
+        List<? extends PersistencePackage> units = null;
         if (jpaFacet != null)
         {
             units = jpaFacet.getPersistenceUnits();
@@ -67,13 +65,13 @@ public class ModuleModel extends EjbModel
             {
                 this.unit = units.get(0);
 
-                EntityMappings entityMappings = jpaFacet.getEntityMappings(unit);
+                PersistenceMappings entityMappings = jpaFacet.getEntityMappings(unit);
 
                 Map<PsiClass, Entity> classToInheritanceBaseEntity = new HashMap<PsiClass, Entity>();
 
-                for (Entity entity : entityMappings.getEntities())
+                for (PersistentEntity entity : entityMappings.getModelHelper().getPersistentEntities())
                 {
-                    PersistentEntityModelHelper entityModelHelper = ((PersistentEntity) entity).getObjectModelHelper();
+                    PersistentEntityModelHelper entityModelHelper = entity.getObjectModelHelper();
 
                     PersistenceInheritanceType inheritanceType = entityModelHelper.getInheritanceType(entity);
 
@@ -85,57 +83,62 @@ public class ModuleModel extends EjbModel
 
                         for (PsiClass subClass : query)
                         {
-                            classToInheritanceBaseEntity.put(subClass, entity);
+                            classToInheritanceBaseEntity.put(subClass, (Entity) entity);
                         }
 
-                        classToInheritanceBaseEntity.put(entityClass, entity);
+                        classToInheritanceBaseEntity.put(entityClass, (Entity) entity);
                     }
                 }
 
 
-                for (Entity entity : entityMappings.getEntities())
+                for (PersistentEntity persistentEntity : entityMappings.getModelHelper().getPersistentEntities())
                 {
-                    Entity baseEntity = classToInheritanceBaseEntity.get(entity.getClazz().getValue());
-
-                    EntityModel entityModel = null;
-                    if (baseEntity != null)
+                    if (persistentEntity instanceof Entity)
                     {
-                        PersistentEntityModelHelper entityModelHelper = ((PersistentEntity) baseEntity).getObjectModelHelper();
+                        Entity entity = (Entity) persistentEntity;
 
-                        PersistenceInheritanceType inheritanceType = entityModelHelper.getInheritanceType(baseEntity);
-                        if (inheritanceType != null)
+                        Entity baseEntity = classToInheritanceBaseEntity.get(entity.getClazz().getValue());
+
+                        EntityModel entityModel = null;
+                        if (baseEntity != null)
                         {
-                            switch (inheritanceType)
+                            PersistentEntityModelHelper entityModelHelper = baseEntity.getObjectModelHelper();
+
+                            PersistenceInheritanceType inheritanceType = entityModelHelper.getInheritanceType(baseEntity);
+                            if (inheritanceType != null)
                             {
-                                case JOINED:
-                                    entityModel = new JoinedModel(this, entity, baseEntity);
-                                    break;
-                                case SINGLE_TABLE:
-                                    entityModel = new SingleTableModel(this, entity, baseEntity);
-                                    break;
-                                case TABLE_PER_CLASS:
-                                    entityModel = new TablePerClassModel(this, entity, baseEntity);
-                                    break;
+                                switch (inheritanceType)
+                                {
+                                    case JOINED:
+                                        entityModel = new JoinedModel(this, entity, baseEntity);
+                                        break;
+                                    case SINGLE_TABLE:
+                                        entityModel = new SingleTableModel(this, entity, baseEntity);
+                                        break;
+                                    case TABLE_PER_CLASS:
+                                        entityModel = new TablePerClassModel(this, entity, baseEntity);
+                                        break;
+                                }
                             }
                         }
-                    }
 
-                    if (entityModel == null)
-                    {
-                        entityModel = new EntityModel(this, entity);
-                    }
+                        if (entityModel == null)
+                        {
+                            entityModel = new EntityModel(this, entity);
+                        }
 
-                    classToModel.put(entity.getClazz().getValue(), entityModel);
+                        classToModel.put(entity.getClazz().getValue(), entityModel);
+                    }
                 }
 
-                for (Embeddable embeddable : entityMappings.getEmbeddables())
+                for (PersistentEmbeddable embeddable : entityMappings.getModelHelper().getPersistentEmbeddables())
                 {
-                    classToModel.put(embeddable.getClazz().getValue(), new EmbeddableModel(this, embeddable));
+                    classToModel.put(embeddable.getClazz().getValue(), new EmbeddableModel(this, (Embeddable) embeddable));
                 }
 
-                for (MappedSuperclass mappedSuperclass : entityMappings.getMappedSuperclasses())
+                for (PersistentSuperclass mappedSuperclass : entityMappings.getModelHelper().getPersistentSuperclasses())
                 {
-                    classToModel.put(mappedSuperclass.getClazz().getValue(), new MappedSuperclassModel(this, mappedSuperclass));
+                    classToModel.put(mappedSuperclass.getClazz().getValue(), new MappedSuperclassModel(this, (MappedSuperclass) mappedSuperclass));
                 }
 
                 for (ClassModel classModel : classToModel.values())

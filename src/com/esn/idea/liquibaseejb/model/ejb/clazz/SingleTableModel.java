@@ -10,6 +10,7 @@ import com.esn.idea.liquibaseejb.util.EsnPsiUtils;
 import com.intellij.javaee.model.common.persistence.mapping.Entity;
 import com.intellij.javaee.model.common.persistence.mapping.DiscriminatorColumn;
 import com.intellij.javaee.model.xml.persistence.mapping.DiscriminatorType;
+import com.intellij.persistence.model.PersistentEntity;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifierListOwner;

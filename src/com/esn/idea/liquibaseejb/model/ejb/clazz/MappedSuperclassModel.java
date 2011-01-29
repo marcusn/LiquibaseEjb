@@ -6,6 +6,7 @@ import com.esn.idea.liquibaseejb.model.ejb.context.EjbModelContext;
 import com.esn.idea.liquibaseejb.model.ejb.EjbModel;
 import com.intellij.javaee.model.common.persistence.mapping.PersistentObject;
 import com.intellij.javaee.model.common.persistence.mapping.MappedSuperclass;
+import com.intellij.persistence.model.PersistentSuperclass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.SearchScope;

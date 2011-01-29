@@ -32,7 +32,7 @@ public abstract class ClassModel<T extends PersistentObject> extends EjbModel
     {
         final Collection<MemberModel> res = new ArrayList<MemberModel>();
 
-        persistentObject.visitAttributes(new MemberModelFactory(moduleModel, res));
+        new MemberModelFactory(moduleModel, res).accept(persistentObject.getAllAttributes());
 
         return res;
     }

@@ -4,6 +4,7 @@ import com.esn.idea.liquibaseejb.model.ejb.module.ModuleModel;
 import com.esn.idea.liquibaseejb.model.ejb.context.EjbModelContext;
 import com.esn.idea.liquibaseejb.model.ejb.EjbModel;
 import com.intellij.javaee.model.common.persistence.mapping.Entity;
+import com.intellij.persistence.model.PersistentEntity;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.GlobalSearchScope;

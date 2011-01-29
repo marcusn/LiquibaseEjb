@@ -78,9 +78,9 @@ public class LiquibaseSchemaInspection extends BaseJavaLocalInspectionTool
     }
 
     @Nullable
-    public ProblemDescriptor[] checkClass(@NotNull PsiClass psiClass, @NotNull InspectionManager inspectionManager, boolean b)
+    public ProblemDescriptor[] checkClass(@NotNull PsiClass psiClass, @NotNull InspectionManager inspectionManager, boolean onTheFly)
     {
-        ProblemsHolder problemsHolder = new ProblemsHolder(inspectionManager, psiClass.getContainingFile());
+        ProblemsHolder problemsHolder = new ProblemsHolder(inspectionManager, psiClass.getContainingFile(), onTheFly);
         LiquibaseModuleComponent liquibaseModuleComponent = LiquibaseModuleComponent.getInstance(psiClass);
         if (liquibaseModuleComponent != null && liquibaseModuleComponent.isLiquibaseEnabled())
         {

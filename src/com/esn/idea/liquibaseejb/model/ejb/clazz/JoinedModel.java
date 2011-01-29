@@ -6,6 +6,7 @@ import com.esn.idea.liquibaseejb.model.ejb.member.MemberModel;
 import com.esn.idea.liquibaseejb.model.database.DatabaseModel;
 import com.intellij.javaee.model.common.persistence.mapping.Entity;
 import com.intellij.javaee.model.common.persistence.mapping.JoinColumnBase;
+import com.intellij.persistence.model.PersistentEntity;
 import com.intellij.psi.PsiClass;
 
 import java.util.List;
