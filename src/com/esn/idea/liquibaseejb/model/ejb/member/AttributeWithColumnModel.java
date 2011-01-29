@@ -156,9 +156,9 @@ public class AttributeWithColumnModel extends MemberModel<AttributeWithColumn>
                 {
                     columnModel.setNotNull(true);
 
-                    GenerationType type = EsnPsiUtils.getAnnotationEnumValue(generatedValueAnnotation, "strategy", GenerationType.class, GenerationType.AUTO);
+                    String type = EsnPsiUtils.getAnnotationEnumStringValue(generatedValueAnnotation, "strategy");
 
-                    if (type == GenerationType.AUTO)
+                    if ("".equals(type) || "AUTO".equals(type))
                     {
                         columnModel.setAutoIncrement(true);
                     }
@@ -226,18 +226,11 @@ public class AttributeWithColumnModel extends MemberModel<AttributeWithColumn>
             {
                 PsiAnnotation temporalAnnotation = fieldModifierList.findAnnotation(Temporal.class.getName());
 
-                TemporalType temporalType = EsnPsiUtils.getAnnotationEnumValue(temporalAnnotation, "value", TemporalType.class, TemporalType.TIMESTAMP);
+                String temporalType = EsnPsiUtils.getAnnotationEnumStringValue(temporalAnnotation, "value");
 
-                switch (temporalType)
-                {
-
-                    case DATE:
-                        return "DATE";
-                    case TIME:
-                        return "TIME";
-                    case TIMESTAMP:
-                        return "DATETIME";
-                }
+                if ("TIMESTAMP".equals(temporalType) || "".equals(temporalType)) return "DATETIME";
+                if ("DATE".equals(temporalType)) return "DATE";
+                if ("TIME".equals(temporalType)) return "TIME";
             }
 
 
@@ -259,23 +252,16 @@ public class AttributeWithColumnModel extends MemberModel<AttributeWithColumn>
                 {
                     if (fieldClass.isEnum())
                     {
-                        EnumType enumType = EnumType.ORDINAL;
+                        String enumType = "ORDINAL";
                         PsiAnnotation enumerationAnnotation = fieldModifierList.findAnnotation(Enumerated.class.getName());
 
                         if (enumerationAnnotation != null)
                         {
-                            enumType = EsnPsiUtils.getAnnotationEnumValue(enumerationAnnotation, "value", EnumType.class, EnumType.ORDINAL);
+                            enumType = EsnPsiUtils.getAnnotationEnumStringValue(enumerationAnnotation, "value");
                         }
-                        switch (enumType)
-                        {
-                            case ORDINAL:
-                                return "SMALLINT";
-                            case STRING:
-                                return stringTypeFromAnnotations(columnSpec, 255);
-                        }
+                        if ("".equals(enumType) || "ORDINAL".equals(enumType)) return "SMALLINT";
+                        if ("STRING".equals(enumType)) return stringTypeFromAnnotations(columnSpec, 255);
                     }
-
-
                 }
             }
         }

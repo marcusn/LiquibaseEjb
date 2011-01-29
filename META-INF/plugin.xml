@@ -2,6 +2,7 @@
 <idea-plugin>
     <id>com.esn.idea.liquibaseejb</id>
     <name>LiquiBase EJB Integration</name>
+    <depends>com.intellij.persistence</depends>
     <depends>com.intellij.javaee</depends>
     <description>
     <![CDATA[LiquiBase EJB Integration Plug-in for IntelliJ IDEA.

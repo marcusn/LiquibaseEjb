@@ -1,5 +1,8 @@
 package com.esn.idea.liquibaseejb.facet;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.ui.Messages;
@@ -107,24 +110,26 @@ public class ConfigFilesTableModel implements TableModel
         chooserDescriptor.setTitle("Select directory for Liquibase ChangeLog");
         VirtualFile[] files = chooseFromDescriptor(chooserDescriptor);
 
-        for (VirtualFile file : files)
+        for (final VirtualFile file : files)
         {
             if (file.isDirectory())
             {
-                try
-                {
-                    VirtualFile liquibaseXml = file.createChildData(this, "liquibase.xml");
-                    FileUtils.copyFileFromResource("com/esn/idea/liquibaseejb/resources/liquibase.xml", liquibaseXml);
+                ApplicationManager.getApplication().invokeLater(
+                        new Runnable() {
+                            public void run() {
+                                try {
+                                    VirtualFile liquibaseXml = file.createChildData(this, "liquibase.xml");
+                                    FileUtils.copyFileFromResource("com/esn/idea/liquibaseejb/resources/liquibase.xml", liquibaseXml);
 
-                    addFromUrl(liquibaseXml.getUrl());
+                                    addFromUrl(liquibaseXml.getUrl());
 
 
-                }
-                catch (IOException e)
-                {
-                    Messages.showErrorDialog(module.getProject(), "Could not create liquibase changelog", "Liquibase file");
-                    return;
-                }
+                                } catch (IOException e) {
+                                    Messages.showErrorDialog(module.getProject(), "Could not create liquibase changelog", "Liquibase file");
+                                }
+                            }
+                        }
+                );
                 break; // TODO: Support multiple files
             }
         }
