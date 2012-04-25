@@ -5,6 +5,7 @@ import com.esn.idea.liquibaseejb.toolwindow.DatabaseModelView;
 import com.esn.idea.liquibaseejb.refactor.RenameListenerProvider;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -64,17 +65,14 @@ public class LiquibaseProjectComponent implements ProjectComponent
 	public void projectOpened()
 	{
 		ToolWindowManager tmManager = ToolWindowManager.getInstance(project);
-		toolWindow = tmManager.registerToolWindow("LiquibaseEJBModel", true, ToolWindowAnchor.RIGHT);
+        toolWindow = tmManager.registerToolWindow("LiquibaseModel", true, ToolWindowAnchor.RIGHT);
+        ToolWindow toolWindowEjb = tmManager.registerToolWindow("LiquibaseEJBModel", true, ToolWindowAnchor.RIGHT);
 
         liquibaseModelView = new DatabaseModelView("Liquibase");
         ejbModelView = new DatabaseModelView("EJB");
-        JSplitPane tabs = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        //tabs.setDividerLocation(300);
-        //tabs = new JTabbedPane();
-        tabs.add(liquibaseModelView);
-        tabs.add(ejbModelView);
 
-        toolWindow.getComponent().add(tabs);
+        toolWindow.getComponent().add(liquibaseModelView);
+        toolWindowEjb.getComponent().add(ejbModelView);
 
 		RefactoringListenerManager manager = RefactoringListenerManager.getInstance(project);
 		renameListener = new RenameListenerProvider();
