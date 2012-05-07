@@ -32,11 +32,13 @@
         * Tool window with schema as would be created by liquibase changelog as well as EJB model.
         ]]>
     </description>
-    <version>1.02</version>
+    <version>1.03</version>
     <vendor>ESN AB (www.esn.me)</vendor>
-    <idea-version since-build="99.32"/>
+    <idea-version since-build="117.117"/>
     <change-notes>
         <![CDATA[
+        === 1.03 <br>
+* IDEA 11
         === 1.02 <br>
 * IDEA 10
         === 1.01 <br>
