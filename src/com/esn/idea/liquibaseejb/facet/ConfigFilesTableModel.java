@@ -114,7 +114,7 @@ public class ConfigFilesTableModel implements TableModel
         {
             if (file.isDirectory())
             {
-                ApplicationManager.getApplication().invokeLater(
+                ApplicationManager.getApplication().runWriteAction(
                         new Runnable() {
                             public void run() {
                                 try {
