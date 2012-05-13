@@ -6,7 +6,9 @@ import com.esn.idea.liquibaseejb.model.ejb.module.ModuleModel;
 import com.intellij.javaee.model.common.persistence.mapping.JoinColumnBase;
 import com.intellij.javaee.model.common.persistence.mapping.OneToOne;
 import com.intellij.javaee.model.common.persistence.mapping.RelationAttributeBase;
+import com.intellij.persistence.model.PersistentAttribute;
 import com.intellij.psi.*;
+import com.intellij.util.xml.GenericValue;
 
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.PrimaryKeyJoinColumns;
@@ -74,9 +76,13 @@ public class AnyToOneModel extends RelationModel<RelationAttributeBase.AnyToOneB
         boolean isInverse = false;
 
         if (attribute instanceof OneToOne)
-    {
-        isInverse = !("".equals(((OneToOne) attribute).getMappedBy().getStringValue()));
-    }
+        {
+            GenericValue<PersistentAttribute> mappedBy = ((OneToOne) attribute).getMappedBy();
+            String mappedByStringValue = mappedBy.getStringValue();
+            if (mappedByStringValue == null) mappedByStringValue = "";
+
+            isInverse = !("".equals(mappedByStringValue));
+        }
         return isInverse;
     }
 }
