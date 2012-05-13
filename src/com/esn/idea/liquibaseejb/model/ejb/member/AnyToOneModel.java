@@ -62,7 +62,7 @@ public class AnyToOneModel extends RelationModel<RelationAttributeBase.AnyToOneB
                 joinColumnBases = overridingJoinColumnBases;
             }
 
-            List<String> sourceColumns = createJoinColumns(databaseModel, tableName, memberClass, joinColumnBases, columnPrefix, isOptional, isOptional, moduleModel, "fk_" + attribute.getName());
+            List<String> sourceColumns = createJoinColumns(databaseModel, tableName, memberClass, joinColumnBases, columnPrefix, isOptional, true, moduleModel, "fk_" + attribute.getName());
 
             if (attribute instanceof OneToOne)
             {
