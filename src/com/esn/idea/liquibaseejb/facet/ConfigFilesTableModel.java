@@ -139,7 +139,7 @@ public class ConfigFilesTableModel implements TableModel
     private VirtualFile[] chooseFromDescriptor(FileChooserDescriptor chooserDescriptor)
     {
         FileChooserFactory fileChooserFactory = FileChooserFactory.getInstance();
-        FileChooserDialog fileChooserDialog = fileChooserFactory.createFileChooser(chooserDescriptor, module.getProject());
+        FileChooserDialog fileChooserDialog = fileChooserFactory.createFileChooser(chooserDescriptor, module.getProject(), null);
 
         VirtualFile moduleFile = module.getModuleFile();
         VirtualFile chooseRoot = moduleFile;
